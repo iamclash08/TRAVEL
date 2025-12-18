@@ -18,7 +18,7 @@ SECRET_KEY = 'django-insecure-74c4ftrhf*s^-8+g2)0_#5=^v=gk6jznw$c_qbc1kw(#r4c-+5
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'travel-2-9gxe.onrender.com'
+    "travel-2-9gxe.onrender.com",
 ]
 
 
