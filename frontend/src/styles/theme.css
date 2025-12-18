@@ -1,0 +1,46 @@
+:root {
+  --black: #000;
+  --dark: #111;
+  --mid: #222;
+  --white: #fff;
+  --light: #aaa;
+  --radius: 8px;
+  --transition: .25s;
+}
+
+body {
+  background: var(--black);
+  color: var(--white);
+  margin: 0;
+  font-family: "Inter", sans-serif;
+}
+
+.input-field {
+  width: 100%;
+  padding: 14px;
+  border-radius: var(--radius);
+  background: var(--dark);
+  border: 1px solid var(--mid);
+  color: var(--white);
+  margin-bottom: 14px;
+  font-size: 15px;
+}
+
+.black-btn {
+  width: 100%;
+  background: var(--white);
+  color: var(--black);
+  padding: 14px;
+  border-radius: var(--radius);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.white-btn {
+  background: var(--black);
+  color: white;
+  padding: 14px;
+  border: 1px solid white;
+  border-radius: var(--radius);
+  cursor: pointer;
+}

@@ -1,83 +1,85 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { login } from "../services/auth";
-import "../styles/Login.css";
-import GoogleLogin from "./GoogleLogin";   // ✅ Google Login Component
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
-export default function Login() {
+export default function Login(){
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [err, setErr] = useState(null);
-  const navigate = useNavigate();
+  const [error, setError] = useState("");
 
-  async function submit(e) {
+  const nav = useNavigate();
+  const { login } = useAuth();
+
+  function handleSubmit(e){
     e.preventDefault();
-    try {
-      const data = await login(username, password);
 
-      navigate("/dashboard", {
-        state: { user: data.user || { username } },
-      });
-    } catch (error) {
-      setErr(
-        error?.response?.data?.detail ||
-        error.message ||
-        "Login failed"
-      );
+    if(!username.trim() || !password.trim()){
+      setError("All fields required.");
+      return;
+    }
+
+    const success = login(username, password);
+
+    if(success){
+      nav("/dashboard");
+    } else {
+      setError("Invalid username or password.");
     }
   }
 
   return (
-    <div className="login-container">
-      <div className="login-card">
+    <div style={page}>
 
-        <h2 className="login-title">Welcome Back</h2>
+      <div style={card}>
+        <h1>Welcome Back</h1>
 
-        <form onSubmit={submit}>
+        {error && <p style={{color:"red"}}>{error}</p>}
+
+        <form onSubmit={handleSubmit}>
 
           <input
-            type="text"
+            className="input-field"
             placeholder="Username"
             value={username}
-            className="login-input"
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={e=>setUsername(e.target.value)}
           />
 
           <input
+            className="input-field"
             type="password"
             placeholder="Password"
             value={password}
-            className="login-input"
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={e=>setPassword(e.target.value)}
           />
 
-          {err && <div className="error-text">{err}</div>}
-
-          <button type="submit" className="login-btn">
+          <button className="black-btn">
             Login
           </button>
+
         </form>
 
-        <p className="redirect-text">
-          Don’t have an account?{" "}
-          <button
-            onClick={() => navigate("/signup")}
-            className="link-btn"
-          >
-            Sign Up
-          </button>
+        <p style={{marginTop:"15px"}}>
+          Don’t have an account? <Link to="/signup">Create Account</Link>
         </p>
-
-        {/* ------------------------------ */}
-        {/* GOOGLE LOGIN BUTTON SECTION    */}
-        {/* ------------------------------ */}
-
-        <div className="google-section">
-          <hr className="google-divider" />
-          <GoogleLogin />   {/* ✅ GOOGLE LOGIN BUTTON */}
-        </div>
 
       </div>
     </div>
   );
 }
+
+const page = {
+  display:"flex",
+  height:"100vh",
+  justifyContent:"center",
+  alignItems:"center",
+  background:"#000"
+};
+
+const card = {
+  background:"#111",
+  width:"350px",
+  padding:"40px",
+  borderRadius:"10px",
+  textAlign:"center"
+};

@@ -1,69 +1,94 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { register } from "../services/auth";
-import "../styles/Signup.css";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
-export default function Signup() {
+export default function Signup(){
+
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
-  const navigate = useNavigate();
+  const [error, setError] = useState("");
 
-  async function handleSignup(e) {
+  const nav = useNavigate();
+  const { signup } = useAuth();
+
+  function handleSignup(e){
     e.preventDefault();
-    try {
-      await register(username, email, password);
-      navigate("/");
-    } catch (err) {
-      setError(err.response?.data?.detail || "Signup failed. Try again!");
+
+    if(!username.trim() || !email.trim() || !password.trim()){
+      setError("All fields required");
+      return;
+    }
+
+    const success = signup(username, email, password);
+
+    if(success){
+      nav("/");
+    } else {
+      setError("Signup failed");
     }
   }
 
   return (
-    <div className="signup-container">
-      <div className="signup-card">
+    <div style={page}>
 
-        <h2 className="signup-title">Create Account</h2>
+      <div style={card}>
+        <h1>Create Account</h1>
+
+        {error && <p style={{color:"red"}}>{error}</p>}
 
         <form onSubmit={handleSignup}>
+
           <input
-            type="text"
+            className="input-field"
             placeholder="Username"
             value={username}
-            className="signup-input"
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={e=>setUsername(e.target.value)}
           />
 
           <input
-            type="email"
+            className="input-field"
             placeholder="Email"
             value={email}
-            className="signup-input"
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={e=>setEmail(e.target.value)}
           />
 
           <input
-            type="password"
+            className="input-field"
             placeholder="Password"
+            type="password"
             value={password}
-            className="signup-input"
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={e=>setPassword(e.target.value)}
           />
 
-          {error && <p className="error-text">{error}</p>}
+          <button className="black-btn">
+            Signup
+          </button>
 
-          <button type="submit" className="signup-btn">Sign Up</button>
         </form>
 
-        <p className="signup-footer">
-          Already have an account?{" "}
-          <button onClick={() => navigate("/")} className="link-btn">
-            Login
-          </button>
+        <p style={{marginTop:"15px"}}>
+          Already have account? <Link to="/">Login</Link>
         </p>
 
       </div>
+
     </div>
   );
 }
+
+const page = {
+  display:"flex",
+  height:"100vh",
+  justifyContent:"center",
+  alignItems:"center",
+  background:"#000"
+};
+
+const card = {
+  background:"#111",
+  width:"350px",
+  padding:"40px",
+  borderRadius:"10px",
+  textAlign:"center"
+};
