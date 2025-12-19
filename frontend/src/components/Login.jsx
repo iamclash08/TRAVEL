@@ -2,39 +2,51 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
-export default function Login(){
+export default function Login() {
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const nav = useNavigate();
   const { login } = useAuth();
+  const nav = useNavigate();
 
-  function handleSubmit(e){
+  async function handleSubmit(e) {
     e.preventDefault();
+    setError("");
 
-    if(!username.trim() || !password.trim()){
-      setError("All fields required.");
+    if (!username || !password) {
+      setError("Fields required");
       return;
     }
 
-    const success = login(username, password);
+    const response = await fetch(
+      "http://127.0.0.1:8000/api/accounts/login/",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      }
+    );
 
-    if(success){
-      nav("/dashboard");
+    if (response.ok) {
+      const data = await response.json();
+      login(data.username);
+      setTimeout(() => {
+        nav("/dashboard");
+      }, 50);
     } else {
-      setError("Invalid username or password.");
+      setError("Wrong credentials");
     }
   }
 
   return (
-    <div style={page}>
+    <main style={styles.container}>
 
-      <div style={card}>
+      <div style={styles.card}>
         <h1>Welcome Back</h1>
 
-        {error && <p style={{color:"red"}}>{error}</p>}
+        {error && <p style={{ color: "red" }}>{error}</p>}
 
         <form onSubmit={handleSubmit}>
 
@@ -42,44 +54,51 @@ export default function Login(){
             className="input-field"
             placeholder="Username"
             value={username}
-            onChange={e=>setUsername(e.target.value)}
+            onChange={(e)=>setUsername(e.target.value)}
           />
 
           <input
             className="input-field"
-            type="password"
             placeholder="Password"
+            type="password"
             value={password}
-            onChange={e=>setPassword(e.target.value)}
+            onChange={(e)=>setPassword(e.target.value)}
           />
 
           <button className="black-btn">
             Login
           </button>
-
         </form>
 
-        <p style={{marginTop:"15px"}}>
-          Don’t have an account? <Link to="/signup">Create Account</Link>
+        <p style={{ marginTop: "15px" }}>
+          Don't Have a account? <Link to="/signup">Create</Link>
         </p>
-
       </div>
-    </div>
+
+    </main>
   );
 }
 
-const page = {
-  display:"flex",
-  height:"100vh",
-  justifyContent:"center",
-  alignItems:"center",
-  background:"#000"
-};
+const styles = {
 
-const card = {
-  background:"#111",
-  width:"350px",
-  padding:"40px",
-  borderRadius:"10px",
-  textAlign:"center"
+  container: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingTop: "150px",
+    paddingRight: "40px",
+    paddingBottom: "40px",
+    paddingLeft: "40px",
+  },
+
+  card: {
+    background: "#111",
+    paddingTop: "40px",
+    paddingRight: "40px",
+    paddingBottom: "40px",
+    paddingLeft: "40px",
+    borderRadius: "12px",
+    width: "360px",
+    textAlign: "center",
+  },
 };

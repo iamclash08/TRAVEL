@@ -6,9 +6,21 @@ export default function Navbar() {
   const { user, logout } = useAuth();
   const nav = useNavigate();
 
+  const baseButton = {
+    padding: "12px 26px",
+    borderRadius: "8px",
+    fontWeight: "600",
+    cursor: "pointer",
+    fontSize: "14px",
+    border: "2px solid white",
+    background: "transparent",
+    color: "white",
+    transition: "0.3s",
+  };
+
   return (
-    <div style={styles.nav}>
-      
+    <nav style={styles.nav}>
+
       <button
         style={styles.btnLeft}
         onClick={() => nav("/profile")}
@@ -20,47 +32,58 @@ export default function Navbar() {
         Logged in as {user.username}
       </div>
 
-      <button style={styles.btnRight} onClick={() => {
-        logout();
-        nav("/");
-      }}>
+      <button
+        style={styles.btnRight}
+        onClick={() => {
+          logout();
+          nav("/");
+        }}
+      >
         Logout
       </button>
 
-    </div>
+    </nav>
   );
 }
 
 const styles = {
-  nav:{
-    width:"100%",
-    display:"flex",
-    justifyContent:"space-between",
-    padding:"18px",
-    borderBottom:"1px solid #222",
-    background:"#111",
-    alignItems:"center"
+
+  nav: {
+    width: "100%",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: "20px 80px",
+    background: "#111",
+    borderBottom: "1px solid #222",
   },
 
-  btnLeft:{
-    background:"transparent",
-    color:"white",
-    border:"1px solid white",
-    padding:"8px 14px",
-    borderRadius:"8px",
-    cursor:"pointer"
+  btnLeft: {
+    padding: "12px 26px",
+    borderRadius: "8px",
+    fontWeight: "600",
+    cursor: "pointer",
+    fontSize: "14px",
+    border: "2px solid white",
+    background: "transparent",
+    color: "white",
   },
 
-  centerText:{
-    fontWeight:"600"
+  centerText: {
+    fontWeight: "700",
+    fontSize: "16px",
+    textAlign: "center",
+    flex: 1,
   },
 
-  btnRight:{
-    background:"white",
-    color:"black",
-    padding:"8px 14px",
-    borderRadius:"8px",
-    cursor:"pointer",
-    border:"none"
-  }
+  btnRight: {
+    padding: "12px 26px",
+    borderRadius: "8px",
+    fontWeight: "600",
+    cursor: "pointer",
+    fontSize: "14px",
+    border: "2px solid white",
+    background: "transparent",
+    color: "white",
+  },
 };

@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
 
-export default function Signup(){
+export default function Signup() {
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -10,19 +9,26 @@ export default function Signup(){
   const [error, setError] = useState("");
 
   const nav = useNavigate();
-  const { signup } = useAuth();
 
-  function handleSignup(e){
+  async function handleSubmit(e){
     e.preventDefault();
+    setError("");
 
-    if(!username.trim() || !email.trim() || !password.trim()){
-      setError("All fields required");
+    if(!username || !email || !password){
+      setError("Fields required");
       return;
     }
 
-    const success = signup(username, email, password);
+    const response = await fetch(
+      "http://127.0.0.1:8000/api/accounts/register/",
+      {
+        method:"POST",
+        headers: { "Content-Type":"application/json" },
+        body:JSON.stringify({ username, email, password })
+      }
+    );
 
-    if(success){
+    if(response.ok){
       nav("/");
     } else {
       setError("Signup failed");
@@ -30,27 +36,27 @@ export default function Signup(){
   }
 
   return (
-    <div style={page}>
+    <main style={styles.container}>
 
-      <div style={card}>
+      <div style={styles.card}>
         <h1>Create Account</h1>
 
-        {error && <p style={{color:"red"}}>{error}</p>}
+        {error && <p style={{ color:"red" }}>{error}</p>}
 
-        <form onSubmit={handleSignup}>
+        <form onSubmit={handleSubmit}>
 
           <input
             className="input-field"
             placeholder="Username"
             value={username}
-            onChange={e=>setUsername(e.target.value)}
+            onChange={(e)=>setUsername(e.target.value)}
           />
 
           <input
             className="input-field"
             placeholder="Email"
             value={email}
-            onChange={e=>setEmail(e.target.value)}
+            onChange={(e)=>setEmail(e.target.value)}
           />
 
           <input
@@ -58,7 +64,7 @@ export default function Signup(){
             placeholder="Password"
             type="password"
             value={password}
-            onChange={e=>setPassword(e.target.value)}
+            onChange={(e)=>setPassword(e.target.value)}
           />
 
           <button className="black-btn">
@@ -67,28 +73,31 @@ export default function Signup(){
 
         </form>
 
-        <p style={{marginTop:"15px"}}>
+        <p style={{ marginTop:"15px" }}>
           Already have account? <Link to="/">Login</Link>
         </p>
-
       </div>
 
-    </div>
+    </main>
   );
 }
 
-const page = {
-  display:"flex",
-  height:"100vh",
-  justifyContent:"center",
-  alignItems:"center",
-  background:"#000"
-};
+const styles = {
+  container: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingTop: "150px",
+    paddingRight: "40px",
+    paddingBottom: "40px",
+    paddingLeft: "40px",
+  },
 
-const card = {
-  background:"#111",
-  width:"350px",
-  padding:"40px",
-  borderRadius:"10px",
-  textAlign:"center"
+  card:{
+    background:"#111",
+    padding:"40px",
+    borderRadius:"12px",
+    width:"360px",
+    textAlign:"center",
+  }
 };

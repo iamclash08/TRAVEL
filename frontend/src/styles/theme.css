@@ -1,30 +1,62 @@
-:root {
-  --black: #000;
-  --dark: #111;
-  --mid: #222;
-  --white: #fff;
-  --light: #aaa;
-  --radius: 8px;
-  --transition: .25s;
+/* ========= GLOBAL RESET ========= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
+html,
 body {
-  background: var(--black);
-  color: var(--white);
-  margin: 0;
+  background: #000;
+  color: #fff;
   font-family: "Inter", sans-serif;
+  line-height: 1.5;
+  overflow-x: hidden;   /* prevents horizontal scroll */
 }
+
+/* ========= COLOR THEME ========= */
+
+:root {
+  --black: #000;
+  --white: #fff;
+  --dark: #111;
+  --mid: #222;
+  --light: #aaa;
+  --radius: 8px;
+  --transition: 0.25s;
+}
+
+/* ========= LINKS ========= */
+
+a {
+  color: var(--white);
+  text-decoration: none;
+  transition: opacity var(--transition);
+}
+
+a:hover {
+  opacity: 0.7;
+}
+
+/* ========= FORM INPUTS ========= */
 
 .input-field {
   width: 100%;
-  padding: 14px;
-  border-radius: var(--radius);
   background: var(--dark);
   border: 1px solid var(--mid);
+  border-radius: var(--radius);
+  padding: 14px;
   color: var(--white);
-  margin-bottom: 14px;
   font-size: 15px;
+  margin-bottom: 16px;
 }
+
+.input-field::placeholder {
+  color: var(--light);
+}
+
+/* ========= PRIMARY BUTTONS ========= */
 
 .black-btn {
   width: 100%;
@@ -34,13 +66,76 @@ body {
   border-radius: var(--radius);
   font-weight: 600;
   cursor: pointer;
+  border: none;
+  transition: opacity var(--transition);
 }
+
+.black-btn:hover {
+  opacity: 0.9;
+}
+
+/* ========= SECONDARY BUTTON ========= */
 
 .white-btn {
   background: var(--black);
-  color: white;
+  border: 1px solid var(--white);
+  color: var(--white);
   padding: 14px;
-  border: 1px solid white;
   border-radius: var(--radius);
+  font-weight: 600;
   cursor: pointer;
+  transition: var(--transition);
+}
+
+.white-btn:hover {
+  background: var(--white);
+  color: var(--black);
+}
+
+/* ========= HEADINGS ========= */
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: "Montserrat", sans-serif;
+  letter-spacing: 0.4px;
+}
+
+p {
+  font-size: 15px;
+  color: var(--light);
+}
+
+/* ========= SCROLLBAR (optional aesthetic) ========= */
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--mid);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--black);
+}
+
+/* ========= RESPONSIVE GLOBALS ========= */
+
+@media (max-width: 600px) {
+
+  body {
+    padding: 10px;
+  }
+
+  .black-btn,
+  .white-btn {
+    padding: 12px;
+  }
+
+  .input-field {
+    padding: 12px;
+  }
 }
